@@ -2,12 +2,41 @@ import pygame
 
 #images
 IMG_PATH = "assets/images/"
+
 player_img = pygame.image.load(IMG_PATH + "player.png")
 map_img = pygame.image.load(IMG_PATH + "grass_texture.png")
 
+#stick_img = pygame.image.load(IMG_PATH + "stick.png")
+#stone_img = pygame.image.load(IMG_PATH + "stone.png")
 
-stick_img = pygame.image.load(IMG_PATH + "stick.png")
+apple_img = pygame.image.load(IMG_PATH + "apple.png")
+carrot_img = pygame.image.load(IMG_PATH + "carrot.png")
+wheat_img = pygame.image.load(IMG_PATH + "wheat.png")
+potato_img = pygame.image.load(IMG_PATH + "potato.png")
+berry_img = pygame.image.load(IMG_PATH + "berry.png")
+baked_apple_img = pygame.image.load(IMG_PATH + "baked_apple.png")
+soup_img = pygame.image.load(IMG_PATH + "soup.png")
+bread_img = pygame.image.load(IMG_PATH + "bread.png")
+baked_potato_img = pygame.image.load(IMG_PATH + "baked_potato.png")
+juice_img = pygame.image.load(IMG_PATH + "juice.png")
+iron_ore_img = pygame.image.load(IMG_PATH + "iron_ore.png")
+gold_ore_img = pygame.image.load(IMG_PATH + "gold_ore.png")
+raw_diamontiron_img = pygame.image.load(IMG_PATH + "raw_diamont.png")
+iron_img = pygame.image.load(IMG_PATH + "iron.png")
+gold_img = pygame.image.load(IMG_PATH + "gold.png")
+diamont_img = pygame.image.load(IMG_PATH + "diamont.png")
 stone_img = pygame.image.load(IMG_PATH + "stone.png")
+stick_img = pygame.image.load(IMG_PATH + "stick.png")
+grass_img = pygame.image.load(IMG_PATH + "grass.png")
+stone_pick_img = pygame.image.load(IMG_PATH + "stone_pick.png")
+iron_pick_img = pygame.image.load(IMG_PATH + "iron_pick.png")
+diamont_pick_img = pygame.image.load(IMG_PATH + "diamont_pick.png")
+stone_shovel_img = pygame.image.load(IMG_PATH + "stone_shovel.png")
+iron_shovel_img = pygame.image.load(IMG_PATH + "iron_shovel.png")
+diamont_shovel_img = pygame.image.load(IMG_PATH + "diamont_shovel.png")
+stone_axe_img = pygame.image.load(IMG_PATH + "stone_axe.png")
+iron_axe_img = pygame.image.load(IMG_PATH + "iron_axe.png")
+diamont_axe_img = pygame.image.load(IMG_PATH + "diamont_axe.png")
 
 #engine variables
 w_key, a_key, s_key, d_key = False, False, False, False
@@ -16,7 +45,7 @@ cam_x, cam_y, map_x, map_y = 0, 0, 0, 0
 ground_items = [(stick_img, 50, 50), (stone_img, 100, -400)]
 
 #game variables
-inv = [] #[("rock", 10), ("stick", 3)]; to get item + amount --> inv[1] gets second item in inv; inv[1][1] gets amount of the second item in inv; inv[1][0] gets name of second item in inv
+inv = [] #[("rock", 10), ("stick", 3)]
 hp = 100
 x, y = 0, 0
 speed_modifier = 1
@@ -27,6 +56,7 @@ GAME_NAME = "FarmGame"
 STACK_SIZE = 10
 ALL_ITEMS = ["apple", "carrot", "wheat", "potato", "berry",
                         "baked_apple", "soup", "bread", "baked_potato", "juice",
+                        "iron_ore", "gold_ore", "raw_diamont",
                         "iron", "gold", "diamont", 
                         "stone", "stick", "grass",
                         "stone_pick", "iron_pick", "diamont_pick",
