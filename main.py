@@ -41,12 +41,12 @@ diamont_axe_img = pygame.image.load(IMG_PATH + ITEMS_INV_PATH + "diamont_axe.png
 #engine variables
 w_key, a_key, s_key, d_key = False, False, False, False
 delta_time = 0
-cam_x, cam_y, map_x, map_y = 0, 0, 0, 0
-ground_items = [(stick_img, 50, 50), (stone_img, 100, -400)]
+cam_x, cam_y = 0, 0
 fps = 0
 
 #game variables
 inv = [] #[("rock", 10), ("stick", 3)]
+ground_items = [(stick_img, 50, 50), (stone_img, 100, -400)]
 hp = 100
 x, y = 0, 0
 speed_modifier = 1
@@ -65,7 +65,7 @@ ALL_ITEMS = ["apple", "carrot", "wheat", "potato", "berry",
                         "stone_shovel", "iron_shovel", "diamont_shovel",
                         "stone_axe", "iron_axe", "diamont_axe"]
 SPEED = 200
-PLAYER_WIDTH, PLAYER_HEIGHT = 256, 256
+PLAYER_WIDTH, PLAYER_HEIGHT = 64, 64
 PLAYER_WIDTH_OFFSET, PLAYER_HEIGHT_OFFSET = PLAYER_WIDTH / 2, PLAYER_HEIGHT / 2
 CAM_SPEED_DIVIDER = 10
 MAP_OFFSET_X, MAP_OFFSET_Y = 0, 0
@@ -101,6 +101,8 @@ def UpdateCam():
     cam_y += (y - cam_y) / CAM_SPEED_DIVIDER
 
 def Render():
+    global player_x, player_y
+
     screen.fill("white")
 
     map_x = MAP_OFFSET_X - cam_x + SCREEN_WIDTH_OFFSET
@@ -108,8 +110,8 @@ def Render():
     screen.blit(map_img, (map_x, map_y))
 
     for item in ground_items:
-        item_x = item[1] - cam_x
-        item_y = item[2] - cam_y
+        item_x = item[1] - cam_x + SCREEN_WIDTH_OFFSET - (item[0].get_width() / 2)
+        item_y = item[2] - cam_y + SCREEN_HEIGHT_OFFSET - (item[0].get_height() / 2)
         item_texture = item[0]
         screen.blit(item_texture, (item_x, item_y))
 
@@ -136,7 +138,16 @@ def Move():
         if d_key:
             x += SPEED * speed_modifier * delta_time
     
-
+def CheckCollisions():
+    player_rect = pygame.Rect(x, y, PLAYER_WIDTH, PLAYER_HEIGHT)
+    for item in ground_items:
+        item_x = item[1]
+        item_y = item[2]
+        item_height = item[0].get_height()
+        item_width = item[0].get_width()
+        ground_item_rect = pygame.Rect(item_x, item_y, item_width, item_height)
+        if player_rect.colliderect(ground_item_rect):
+            print(f"collision with {ground_item_rect}")
 
 while running_mainloop:
     for event in pygame.event.get(): #loop trough events
@@ -166,10 +177,9 @@ while running_mainloop:
                 d_key = False
 
 
-
-    print(inv_open)
     Move()
     UpdateCam()
+    CheckCollisions()
     Render()
     
     delta_time = clock.tick(60) / 1000 #limit to 40 fps
