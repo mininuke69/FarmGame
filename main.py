@@ -19,7 +19,7 @@ baked_potato_img = pygame.image.load(IMG_PATH + ITEMS_INV_PATH + "baked_potato.p
 juice_img = pygame.image.load(IMG_PATH + ITEMS_INV_PATH + "juice.png")
 iron_ore_img = pygame.image.load(IMG_PATH + ITEMS_INV_PATH + "iron_ore.png")
 gold_ore_img = pygame.image.load(IMG_PATH + ITEMS_INV_PATH + "gold_ore.png")
-raw_diamontiron_img = pygame.image.load(IMG_PATH + ITEMS_INV_PATH + "raw_diamont.png")
+raw_diamont_img = pygame.image.load(IMG_PATH + ITEMS_INV_PATH + "raw_diamont.png")
 iron_img = pygame.image.load(IMG_PATH + ITEMS_INV_PATH + "iron.png")
 gold_img = pygame.image.load(IMG_PATH + ITEMS_INV_PATH + "gold.png")
 diamont_img = pygame.image.load(IMG_PATH + ITEMS_INV_PATH + "diamont.png")
@@ -45,6 +45,7 @@ cam_x, cam_y = 0, 0
 fps = 0
 
 #game variables
+collisions = []
 inv = [] #[("rock", 10), ("stick", 3)]
 ground_items = [(stick_img, 50, 50), (stone_img, 100, -400)]
 hp = 100
@@ -56,14 +57,15 @@ inv_open = False
 #constants
 GAME_NAME = "FarmGame"
 STACK_SIZE = 10
-ALL_ITEMS = ["apple", "carrot", "wheat", "potato", "berry",
-                        "baked_apple", "soup", "bread", "baked_potato", "juice",
-                        "iron_ore", "gold_ore", "raw_diamont",
-                        "iron", "gold", "diamont", 
-                        "stone", "stick", "grass",
-                        "stone_pick", "iron_pick", "diamont_pick",
-                        "stone_shovel", "iron_shovel", "diamont_shovel",
-                        "stone_axe", "iron_axe", "diamont_axe"]
+
+ALL_ITEMS_DICT = {"apple": apple_img, "carrot": carrot_img, "wheat": wheat_img, "potato": potato_img, "berry": berry_img,
+                  "baked_apple": baked_apple_img, "soup": soup_img, "bread": bread_img, "baked_potato": baked_potato_img, "juice": juice_img,
+                  "iron_ore": iron_ore_img, "gold_ore": gold_ore_img, "raw_diamont": raw_diamont_img,
+                  "iron": iron_img, "gold": gold_img, "diamont": diamont_img,
+                  "stone": stone_img, "stick": stick_img, "grass": grass_img,
+                  "stone_pick": stone_pick_img, "iron_pick": iron_pick_img, "diamont_pick": diamont_pick_img,
+                  "stone_shovel": stone_shovel_img, "iron_shovel": iron_shovel_img, "diamont_shovel": diamont_shovel_img,
+                  "stone_axe": stone_axe_img, "iron_axe": iron_axe_img, "diamont_axe": diamont_axe_img}
 SPEED = 200
 PLAYER_WIDTH, PLAYER_HEIGHT = 64, 64
 PLAYER_WIDTH_OFFSET, PLAYER_HEIGHT_OFFSET = PLAYER_WIDTH / 2, PLAYER_HEIGHT / 2
@@ -139,6 +141,9 @@ def Move():
             x += SPEED * speed_modifier * delta_time
     
 def CheckCollisions():
+    global collisions
+    collisions = []
+
     player_rect = pygame.Rect(x, y, PLAYER_WIDTH, PLAYER_HEIGHT)
     for item in ground_items:
         item_x = item[1]
@@ -147,7 +152,7 @@ def CheckCollisions():
         item_width = item[0].get_width()
         ground_item_rect = pygame.Rect(item_x, item_y, item_width, item_height)
         if player_rect.colliderect(ground_item_rect):
-            print(f"collision with {ground_item_rect}")
+            collisions.append(item)
 
 while running_mainloop:
     for event in pygame.event.get(): #loop trough events
