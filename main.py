@@ -2,38 +2,39 @@ import pygame
 
 #images
 IMG_PATH = "assets/images/"
+ITEMS_INV_PATH = "items_inv/"
 
 player_img = pygame.image.load(IMG_PATH + "player.png")
 map_img = pygame.image.load(IMG_PATH + "grass_texture.png")
 
-apple_img = pygame.image.load(IMG_PATH + "apple.png")
-carrot_img = pygame.image.load(IMG_PATH + "carrot.png")
-wheat_img = pygame.image.load(IMG_PATH + "wheat.png")
-potato_img = pygame.image.load(IMG_PATH + "potato.png")
-berry_img = pygame.image.load(IMG_PATH + "berry.png")
-baked_apple_img = pygame.image.load(IMG_PATH + "baked_apple.png")
-soup_img = pygame.image.load(IMG_PATH + "soup.png")
-bread_img = pygame.image.load(IMG_PATH + "bread.png")
-baked_potato_img = pygame.image.load(IMG_PATH + "baked_potato.png")
-juice_img = pygame.image.load(IMG_PATH + "juice.png")
-iron_ore_img = pygame.image.load(IMG_PATH + "iron_ore.png")
-gold_ore_img = pygame.image.load(IMG_PATH + "gold_ore.png")
-raw_diamontiron_img = pygame.image.load(IMG_PATH + "raw_diamont.png")
-iron_img = pygame.image.load(IMG_PATH + "iron.png")
-gold_img = pygame.image.load(IMG_PATH + "gold.png")
-diamont_img = pygame.image.load(IMG_PATH + "diamont.png")
-stone_img = pygame.image.load(IMG_PATH + "stone.png")
-stick_img = pygame.image.load(IMG_PATH + "stick.png")
-grass_img = pygame.image.load(IMG_PATH + "grass.png")
-stone_pick_img = pygame.image.load(IMG_PATH + "stone_pick.png")
-iron_pick_img = pygame.image.load(IMG_PATH + "iron_pick.png")
-diamont_pick_img = pygame.image.load(IMG_PATH + "diamont_pick.png")
-stone_shovel_img = pygame.image.load(IMG_PATH + "stone_shovel.png")
-iron_shovel_img = pygame.image.load(IMG_PATH + "iron_shovel.png")
-diamont_shovel_img = pygame.image.load(IMG_PATH + "diamont_shovel.png")
-stone_axe_img = pygame.image.load(IMG_PATH + "stone_axe.png")
-iron_axe_img = pygame.image.load(IMG_PATH + "iron_axe.png")
-diamont_axe_img = pygame.image.load(IMG_PATH + "diamont_axe.png")
+apple_img = pygame.image.load(IMG_PATH + ITEMS_INV_PATH + "apple.png")
+carrot_img = pygame.image.load(IMG_PATH + ITEMS_INV_PATH + "carrot.png")
+wheat_img = pygame.image.load(IMG_PATH + ITEMS_INV_PATH + "wheat.png")
+potato_img = pygame.image.load(IMG_PATH + ITEMS_INV_PATH + "potato.png")
+berry_img = pygame.image.load(IMG_PATH + ITEMS_INV_PATH + "berry.png")
+baked_apple_img = pygame.image.load(IMG_PATH + ITEMS_INV_PATH + "baked_apple.png")
+soup_img = pygame.image.load(IMG_PATH + ITEMS_INV_PATH + "soup.png")
+bread_img = pygame.image.load(IMG_PATH + ITEMS_INV_PATH + "bread.png")
+baked_potato_img = pygame.image.load(IMG_PATH + ITEMS_INV_PATH + "baked_potato.png")
+juice_img = pygame.image.load(IMG_PATH + ITEMS_INV_PATH + "juice.png")
+iron_ore_img = pygame.image.load(IMG_PATH + ITEMS_INV_PATH + "iron_ore.png")
+gold_ore_img = pygame.image.load(IMG_PATH + ITEMS_INV_PATH + "gold_ore.png")
+raw_diamontiron_img = pygame.image.load(IMG_PATH + ITEMS_INV_PATH + "raw_diamont.png")
+iron_img = pygame.image.load(IMG_PATH + ITEMS_INV_PATH + "iron.png")
+gold_img = pygame.image.load(IMG_PATH + ITEMS_INV_PATH + "gold.png")
+diamont_img = pygame.image.load(IMG_PATH + ITEMS_INV_PATH + "diamont.png")
+stone_img = pygame.image.load(IMG_PATH + ITEMS_INV_PATH + "stone.png")
+stick_img = pygame.image.load(IMG_PATH + ITEMS_INV_PATH + "stick.png")
+grass_img = pygame.image.load(IMG_PATH + ITEMS_INV_PATH + "grass.png")
+stone_pick_img = pygame.image.load(IMG_PATH + ITEMS_INV_PATH + "stone_pick.png")
+iron_pick_img = pygame.image.load(IMG_PATH + ITEMS_INV_PATH + "iron_pick.png")
+diamont_pick_img = pygame.image.load(IMG_PATH + ITEMS_INV_PATH + "diamont_pick.png")
+stone_shovel_img = pygame.image.load(IMG_PATH + ITEMS_INV_PATH + "stone_shovel.png")
+iron_shovel_img = pygame.image.load(IMG_PATH + ITEMS_INV_PATH + "iron_shovel.png")
+diamont_shovel_img = pygame.image.load(IMG_PATH + ITEMS_INV_PATH + "diamont_shovel.png")
+stone_axe_img = pygame.image.load(IMG_PATH + ITEMS_INV_PATH + "stone_axe.png")
+iron_axe_img = pygame.image.load(IMG_PATH + ITEMS_INV_PATH + "iron_axe.png")
+diamont_axe_img = pygame.image.load(IMG_PATH + ITEMS_INV_PATH + "diamont_axe.png")
 
 
 
@@ -49,6 +50,7 @@ inv = [] #[("rock", 10), ("stick", 3)]
 hp = 100
 x, y = 0, 0
 speed_modifier = 1
+inv_open = False
 
 
 #constants
@@ -141,7 +143,7 @@ while running_mainloop:
         if event.type == pygame.QUIT:
             running_mainloop = False
         if event.type == pygame.KEYDOWN:
-            key_unicode = event.dict["unicode"]
+            key_unicode = event.dict["unicode"].lower()
             if key_unicode == "w":
                 w_key = True
             if key_unicode == "a":
@@ -150,8 +152,10 @@ while running_mainloop:
                 s_key = True
             if key_unicode == "d":
                 d_key = True
+            if key_unicode == "e":
+                inv_open = not inv_open
         if event.type == pygame.KEYUP:
-            key_unicode = event.dict["unicode"]
+            key_unicode = event.dict["unicode"].lower()
             if key_unicode == "w":
                 w_key = False
             if key_unicode == "a":
@@ -163,7 +167,7 @@ while running_mainloop:
 
 
 
-    
+    print(inv_open)
     Move()
     UpdateCam()
     Render()
