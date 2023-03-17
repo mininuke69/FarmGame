@@ -28,6 +28,7 @@ PLAYER_RECT_WIDTH, PLAYER_RECT_HEIGHT = 256, 256
 CAM_SPEED_DIVIDER = 10
 MAP_OFFSET_X, MAP_OFFSET_Y = 0, 0
 SCREEN_WIDTH, SCREEN_HEIGHT = 1280, 720
+SCREEN_WIDTH_OFFSET, SCREEN_HEIGHT_OFFSET = SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2
 
 
 #pygame setup
@@ -90,7 +91,7 @@ while running_mainloop:
 
     UpdateCam()
 
-    screen.blit(map_img, (MAP_OFFSET_X - cam_x, MAP_OFFSET_Y - cam_y))
+    screen.blit(map_img, (MAP_OFFSET_X - cam_x + SCREEN_WIDTH_OFFSET, MAP_OFFSET_Y - cam_y + SCREEN_HEIGHT_OFFSET))
     screen.blit(player_img, (x - cam_x, y - cam_y))
 
     
