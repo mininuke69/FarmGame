@@ -1,7 +1,6 @@
 import pygame
 
 #system variables
-screen_width, screen_height = 1280, 720
 w_key, a_key, s_key, d_key = False, False, False, False
 delta_time = 0
 
@@ -13,7 +12,7 @@ area = ""
 speed_modifier = 1
 cam_x, cam_y, map_x, map_y = 0, 0, 0, 0
 
-#game constants
+#constants
 GAME_NAME = "FarmGame"
 ALL_AREAS = ["beach", "ruins", "forest"]
 STACK_SIZE = 10
@@ -27,11 +26,13 @@ ALL_ITEMS = ["apple", "carrot", "wheat", "potato", "berry",
 SPEED = 200
 PLAYER_RECT_WIDTH, PLAYER_RECT_HEIGHT = 256, 256
 CAM_SPEED_DIVIDER = 10
+MAP_OFFSET_X, MAP_OFFSET_Y = 0, 0
+SCREEN_WIDTH, SCREEN_HEIGHT = 1280, 720
 
 
 #pygame setup
 pygame.init()
-screen = pygame.display.set_mode((screen_width, screen_height))
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 clock = pygame.time.Clock()
 running_mainloop = True
 pygame.display.set_caption(GAME_NAME)
@@ -48,13 +49,6 @@ def UpdateCam():
 
     cam_x += (x - cam_x) / CAM_SPEED_DIVIDER
     cam_y += (y - cam_y) / CAM_SPEED_DIVIDER
-
-def UpdateRenderCoords():
-    global render_x
-    global render_y
-
-    render_x = cam_x + (screen_width / 2) - (PLAYER_RECT_WIDTH / 2)
-    render_y = cam_y - (screen_height / 2) + (PLAYER_RECT_HEIGHT / 2)
 
 while running_mainloop:
     for event in pygame.event.get(): #loop trough events
@@ -81,11 +75,12 @@ while running_mainloop:
             if key_unicode == "d":
                 d_key = False
 
+    
     if w_key or a_key or s_key or d_key:
         if w_key:
-            y += SPEED * speed_modifier * delta_time
-        if s_key:
             y -= SPEED * speed_modifier * delta_time
+        if s_key:
+            y += SPEED * speed_modifier * delta_time
         if a_key:
             x -= SPEED * speed_modifier * delta_time
         if d_key:
@@ -94,15 +89,8 @@ while running_mainloop:
     screen.fill("white") #clear screen from previous frame
 
     UpdateCam()
-    UpdateRenderCoords()
 
-
-
-    
-    #player_rect = pygame.Rect(render_x, -render_y, PLAYER_RECT_WIDTH, PLAYER_RECT_HEIGHT)
-    #pygame.draw.rect(screen, "red", player_rect, 1)
-    
-    screen.blit(map_img, (0 - render_x, 0 - render_y))
+    screen.blit(map_img, (MAP_OFFSET_X - cam_x, MAP_OFFSET_Y - cam_y))
     screen.blit(player_img, (x - cam_x, y - cam_y))
 
     
