@@ -6,9 +6,6 @@ IMG_PATH = "assets/images/"
 player_img = pygame.image.load(IMG_PATH + "player.png")
 map_img = pygame.image.load(IMG_PATH + "grass_texture.png")
 
-#stick_img = pygame.image.load(IMG_PATH + "stick.png")
-#stone_img = pygame.image.load(IMG_PATH + "stone.png")
-
 apple_img = pygame.image.load(IMG_PATH + "apple.png")
 carrot_img = pygame.image.load(IMG_PATH + "carrot.png")
 wheat_img = pygame.image.load(IMG_PATH + "wheat.png")
