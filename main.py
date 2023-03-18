@@ -6,9 +6,6 @@ IMG_PATH = "assets/images/"
 player_img = pygame.image.load(IMG_PATH + "player.png")
 map_img = pygame.image.load(IMG_PATH + "grass_texture.png")
 
-#stick_img = pygame.image.load(IMG_PATH + "stick.png")
-#stone_img = pygame.image.load(IMG_PATH + "stone.png")
-
 apple_img = pygame.image.load(IMG_PATH + "apple.png")
 carrot_img = pygame.image.load(IMG_PATH + "carrot.png")
 wheat_img = pygame.image.load(IMG_PATH + "wheat.png")
@@ -38,11 +35,14 @@ stone_axe_img = pygame.image.load(IMG_PATH + "stone_axe.png")
 iron_axe_img = pygame.image.load(IMG_PATH + "iron_axe.png")
 diamont_axe_img = pygame.image.load(IMG_PATH + "diamont_axe.png")
 
+
+
 #engine variables
 w_key, a_key, s_key, d_key = False, False, False, False
 delta_time = 0
 cam_x, cam_y, map_x, map_y = 0, 0, 0, 0
 ground_items = [(stick_img, 50, 50), (stone_img, 100, -400)]
+fps = 0
 
 #game variables
 inv = [] #[("rock", 10), ("stick", 3)]
@@ -80,8 +80,16 @@ pygame.display.set_caption(GAME_NAME)
 
 
 
+#fonts
+CONSOLAS = pygame.font.SysFont("consolas", 24)
+SIMSUN = pygame.font.SysFont("simsun", 16)
+DESART = pygame.font.Font("assets/fonts/desard.otf", 16)
+MISSIGAUGA = pygame.font.Font("assets/fonts/Mississauga.otf", 16)
 
 
+def RenderText(content: str, font: pygame.font.Font, coords: tuple, col: str):
+    txt_img = font.render(content, True, col)
+    screen.blit(txt_img, coords)
 
 def UpdateCam():
     global cam_x
@@ -106,6 +114,8 @@ def Render():
     player_x = x - cam_x + SCREEN_WIDTH_OFFSET - PLAYER_WIDTH_OFFSET
     player_y = y - cam_y + SCREEN_HEIGHT_OFFSET - PLAYER_HEIGHT_OFFSET
     screen.blit(player_img, (player_x, player_y))
+
+    RenderText("FPS: " + str(fps), CONSOLAS, (SCREEN_WIDTH - 100, 20), "black")
 
     pygame.display.update()
 
@@ -158,8 +168,8 @@ while running_mainloop:
     UpdateCam()
     Render()
     
-    delta_time = clock.tick(60) / 1000 #limit to 60 fps
-    fps = 1 / delta_time
+    delta_time = clock.tick(60) / 1000 #limit to 40 fps
+    fps = round(1 / delta_time)
 
 
 print("exiting pygame")
