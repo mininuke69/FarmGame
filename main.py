@@ -47,6 +47,7 @@ fps = 0
 #game variables
 collisions = []
 inv = [] #[("rock", 10), ("stick", 3)]
+inv_size = 4 * 5
 ground_items = [(stick_img, 50, 50), (stone_img, 100, -400)]
 hp = 100
 x, y = 0, 0
@@ -58,7 +59,7 @@ inv_open = False
 GAME_NAME = "FarmGame"
 STACK_SIZE = 10
 
-ALL_ITEMS_DICT = {"apple": apple_img, "carrot": carrot_img, "wheat": wheat_img, "potato": potato_img, "berry": berry_img,
+ALL_ITEMS = {"apple": apple_img, "carrot": carrot_img, "wheat": wheat_img, "potato": potato_img, "berry": berry_img,
                   "baked_apple": baked_apple_img, "soup": soup_img, "bread": bread_img, "baked_potato": baked_potato_img, "juice": juice_img,
                   "iron_ore": iron_ore_img, "gold_ore": gold_ore_img, "raw_diamont": raw_diamont_img,
                   "iron": iron_img, "gold": gold_img, "diamont": diamont_img,
@@ -86,12 +87,12 @@ pygame.display.set_caption(GAME_NAME)
 
 #fonts
 CONSOLAS = pygame.font.SysFont("consolas", 24)
-SIMSUN = pygame.font.SysFont("simsun", 16)
-DESART = pygame.font.Font("assets/fonts/desard.otf", 16)
-MISSIGAUGA = pygame.font.Font("assets/fonts/Mississauga.otf", 16)
+SIMSUN = pygame.font.SysFont("simsun", 30)
+DESART = pygame.font.Font("assets/fonts/desard.otf", 30)
+MISSIGAUGA = pygame.font.Font("assets/fonts/Mississauga.otf", 30)
 
 
-def RenderText(content: str, font: pygame.font.Font, coords: tuple, col: str):
+def RenderText(content: str, font: pygame.font.Font, coords: tuple, col = "black"):
     txt_img = font.render(content, True, col)
     screen.blit(txt_img, coords)
 
@@ -120,6 +121,9 @@ def Render():
     player_x = x - cam_x + SCREEN_WIDTH_OFFSET - PLAYER_WIDTH_OFFSET
     player_y = y - cam_y + SCREEN_HEIGHT_OFFSET - PLAYER_HEIGHT_OFFSET
     screen.blit(player_img, (player_x, player_y))
+
+    if len(collisions) > 0:
+        RenderText(f"Press F to pick up", MISSIGAUGA, (SCREEN_WIDTH_OFFSET, SCREEN_HEIGHT_OFFSET), "black")
 
     RenderText("FPS: " + str(fps), CONSOLAS, (SCREEN_WIDTH - 100, 20), "black")
 
@@ -154,6 +158,10 @@ def CheckCollisions():
         if player_rect.colliderect(ground_item_rect):
             collisions.append(item)
 
+def Pickup():
+    if len(inv) < inv_size:
+        
+
 while running_mainloop:
     for event in pygame.event.get(): #loop trough events
         if event.type == pygame.QUIT:
@@ -170,6 +178,8 @@ while running_mainloop:
                 d_key = True
             if key_unicode == "e":
                 inv_open = not inv_open
+            if key_unicode == "f":
+                pass
         if event.type == pygame.KEYUP:
             key_unicode = event.dict["unicode"].lower()
             if key_unicode == "w":
