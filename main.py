@@ -46,9 +46,9 @@ fps = 0
 
 #game variables
 collisions = []
-inv = [] #[("rock", 10), ("stick", 3)]
+inv = [('stick', 1)] #[("rock", 10), ("stick", 3)]
 inv_size = 4 * 5
-ground_items = [(stick_img, 50, 50), (stone_img, 100, -400)]
+ground_items = [(stick_img, 50, 50), (stone_img, 100, -400), (wheat_img, -50, -50)]
 hp = 100
 x, y = 0, 0
 speed_modifier = 1
@@ -59,14 +59,14 @@ inv_open = False
 GAME_NAME = "FarmGame"
 STACK_SIZE = 10
 
-ALL_ITEMS = {"apple": apple_img, "carrot": carrot_img, "wheat": wheat_img, "potato": potato_img, "berry": berry_img,
-                  "baked_apple": baked_apple_img, "soup": soup_img, "bread": bread_img, "baked_potato": baked_potato_img, "juice": juice_img,
-                  "iron_ore": iron_ore_img, "gold_ore": gold_ore_img, "raw_diamont": raw_diamont_img,
-                  "iron": iron_img, "gold": gold_img, "diamont": diamont_img,
-                  "stone": stone_img, "stick": stick_img, "grass": grass_img,
-                  "stone_pick": stone_pick_img, "iron_pick": iron_pick_img, "diamont_pick": diamont_pick_img,
-                  "stone_shovel": stone_shovel_img, "iron_shovel": iron_shovel_img, "diamont_shovel": diamont_shovel_img,
-                  "stone_axe": stone_axe_img, "iron_axe": iron_axe_img, "diamont_axe": diamont_axe_img}
+ALL_OBJECTS = {"apple": apple_img, "carrot": carrot_img, "wheat": wheat_img, "potato": potato_img, "berry": berry_img,
+               "baked_apple": baked_apple_img, "soup": soup_img, "bread": bread_img, "baked_potato": baked_potato_img, "juice": juice_img,
+               "iron_ore": iron_ore_img, "gold_ore": gold_ore_img, "raw_diamont": raw_diamont_img,
+               "iron": iron_img, "gold": gold_img, "diamont": diamont_img,
+               "stone": stone_img, "stick": stick_img, "grass": grass_img,
+               "stone_pick": stone_pick_img, "iron_pick": iron_pick_img, "diamont_pick": diamont_pick_img,
+               "stone_shovel": stone_shovel_img, "iron_shovel": iron_shovel_img, "diamont_shovel": diamont_shovel_img,
+               "stone_axe": stone_axe_img, "iron_axe": iron_axe_img, "diamont_axe": diamont_axe_img}
 SPEED = 200
 PLAYER_WIDTH, PLAYER_HEIGHT = 64, 64
 PLAYER_WIDTH_OFFSET, PLAYER_HEIGHT_OFFSET = PLAYER_WIDTH / 2, PLAYER_HEIGHT / 2
@@ -149,18 +149,42 @@ def CheckCollisions():
     collisions = []
 
     player_rect = pygame.Rect(x, y, PLAYER_WIDTH, PLAYER_HEIGHT)
+
     for item in ground_items:
         item_x = item[1]
         item_y = item[2]
         item_height = item[0].get_height()
         item_width = item[0].get_width()
+
         ground_item_rect = pygame.Rect(item_x, item_y, item_width, item_height)
+
         if player_rect.colliderect(ground_item_rect):
             collisions.append(item)
 
-def Pickup():
-    if len(inv) < inv_size:
-        
+def Interact():
+    for count_back in range(len(collisions), 0, -1):
+        last_item = collisions[count_back - 1]
+        last_item_img = last_item[0]
+        last_item_name = list(ALL_OBJECTS.keys())[list(ALL_OBJECTS.values()).index(last_item_img)] #value to key in ALL_OBJECTS
+        if last_item_name in ALL_OBJECTS: #replace ALL_OBJECTS with all collectible items later
+
+            ground_items.remove(ground_items[count_back - 1]) #remove the last item from collisions
+            #inv.append((last_item_name, 1))
+            AddToInv(last_item_name, 1)
+    
+def AddToInv(item, amount):
+    items_to_place = amount
+    while items_to_place > 0:
+        for slot in inv:
+            if slot[0] == item and slot[1] < STACK_SIZE: #if 'item name in slot' == 'item name' and item amount in slot < stack size
+                slot_index = inv.index(slot)
+                while inv[slot_index][1] < STACK_SIZE and items_to_place > 0:
+                    inv[slot_index] = (item, inv[slot_index][1] + 1)
+                    items_to_place -= 1
+        if items_to_place > 0:
+            inv.append((item, 1))
+            items_to_place -= 1
+
 
 while running_mainloop:
     for event in pygame.event.get(): #loop trough events
@@ -179,7 +203,7 @@ while running_mainloop:
             if key_unicode == "e":
                 inv_open = not inv_open
             if key_unicode == "f":
-                pass
+                Interact()
         if event.type == pygame.KEYUP:
             key_unicode = event.dict["unicode"].lower()
             if key_unicode == "w":
@@ -191,13 +215,15 @@ while running_mainloop:
             if key_unicode == "d":
                 d_key = False
 
+    if inv_open:
+        print(inv)
 
     Move()
     UpdateCam()
     CheckCollisions()
     Render()
     
-    delta_time = clock.tick(60) / 1000 #limit to 40 fps
+    delta_time = clock.tick(60) / 1000 #limit to 60 fps
     fps = round(1 / delta_time)
 
 
